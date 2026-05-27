@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marc Delaney — Builder, Tinkerer, Movie Nerd</title>
+  <meta name="description" content="Personal site of Marc Delaney — projects, tools, films, and a few games to mess with." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a href="#" class="logo">
+      <span class="logo-bracket">&lt;</span>marc<span class="logo-dot">.</span>delaney<span class="logo-bracket">/&gt;</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about">about</a>
+      <a href="#projects">projects</a>
+      <a href="#films">films</a>
+      <a href="#games">games</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="status-pill" type="button" aria-live="polite">
+      <span class="status-dot"></span>
+      <span class="status-text">available for work</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-meta">
+        <span class="meta-label">// portfolio</span>
+        <span class="meta-divider"></span>
+        <span class="meta-label">v2026.05</span>
+      </div>
+      <h1 class="hero-title">
+        I build <span class="accent">useful things</span><br />
+        on the internet.<span class="cursor">_</span>
+      </h1>
+      <p class="hero-sub">
+        Engineer based in the UK. I design and ship products, tools, and the
+        occasional weird side project. Currently obsessed with fast UIs,
+        local-first software, and good film scores.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary">
+          See the work
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">12+</span>
+          <span class="stat-label">shipped projects</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">8 yrs</span>
+          <span class="stat-label">writing software</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">tabs open right now</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>About</h2>
+        <span class="section-rule"></span>
+      </div>
+      <div class="about-grid">
+        <div class="about-copy">
+          <p>
+            Hi — I'm Marc. I'm a software engineer who likes building things
+            that feel obvious to use but are doing something interesting under
+            the hood. I care a lot about craft: typography, motion, the way a
+            button feels when you press it.
+          </p>
+          <p>
+            Most of my work lives at the intersection of <em>web</em>, <em>tools</em>,
+            and <em>automation</em>. Outside of that I write a bit, watch a lot of
+            films, and slowly chip away at side projects that may or may not
+            ever ship.
+          </p>
+        </div>
+        <aside class="about-card">
+          <div class="card-row"><span>location</span><span>UK</span></div>
+          <div class="card-row"><span>stack</span><span>TS · React · Node · Go</span></div>
+          <div class="card-row"><span>writing</span><span>occasional</span></div>
+          <div class="card-row"><span>currently</span><span>building things</span></div>
+          <div class="card-row"><span>listening</span><span>Bonobo · Floating Points</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>Projects &amp; Tools</h2>
+        <span class="section-rule"></span>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-tag">web app</div>
+          <h3>Lattice</h3>
+          <p>A keyboard-driven note tool with bi-directional links and a focus on speed.</p>
+          <div class="project-meta">
+            <span>React</span><span>·</span><span>SQLite</span><span>·</span><span>Tauri</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-tag">cli</div>
+          <h3>shipd</h3>
+          <p>Tiny deploy CLI for personal projects — one config, one command, predictable output.</p>
+          <div class="project-meta">
+            <span>Go</span><span>·</span><span>SSH</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-tag">tool</div>
+          <h3>Palette</h3>
+          <p>Generates accessible colour systems from a single brand colour. Used in two products.</p>
+          <div class="project-meta">
+            <span>TypeScript</span><span>·</span><span>WCAG</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-tag">experiment</div>
+          <h3>Mirror</h3>
+          <p>Real-time browser tab that mirrors what you're doing locally — for screen-share demos.</p>
+          <div class="project-meta">
+            <span>WebRTC</span><span>·</span><span>Node</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-tag">website</div>
+          <h3>marcdelaney.co.uk</h3>
+          <p>This site. Built from scratch — no framework, just HTML, CSS, and a sprinkle of JS.</p>
+          <div class="project-meta">
+            <span>HTML</span><span>·</span><span>CSS</span><span>·</span><span>JS</span>
+          </div>
+        </article>
+        <article class="project-card project-card--ghost">
+          <div class="project-tag">soon</div>
+          <h3>Something new</h3>
+          <p>In the oven. Check back in a few weeks.</p>
+          <div class="project-meta"><span>tbd</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="films" class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>Films I Keep Coming Back To</h2>
+        <span class="section-rule"></span>
+      </div>
+      <p class="section-intro">
+        A rotating list of films I think about a lot. Not a "best of" — more a
+        "these rewired something" list.
+      </p>
+      <ul class="films-list">
+        <li class="film-whiplash"><video class="whiplash-clip" src="images/whiplash-whiplash-2014.mp4" muted loop playsinline preload="metadata" aria-hidden="true"></video><span class="film-year">2014</span><span class="film-title">Whiplash</span><span class="film-note">Damien Chazelle</span></li>
+        <li><span class="film-year">2010</span><span class="film-title">The Social Network</span><span class="film-note">Fincher · Sorkin · Reznor</span></li>
+        <li><span class="film-year">2007</span><span class="film-title">There Will Be Blood</span><span class="film-note">Paul Thomas Anderson</span></li>
+        <li><span class="film-year">2017</span><span class="film-title">Blade Runner 2049</span><span class="film-note">Villeneuve</span></li>
+        <li class="film-matrix"><canvas class="matrix-row-canvas" aria-hidden="true"></canvas><span class="film-year">1999</span><span class="film-title">The Matrix</span><span class="film-note">The Wachowskis</span></li>
+        <li class="film-interstellar"><span class="film-year"><span class="year-num">2014</span><span class="tick-watch" aria-hidden="true"></span></span><span class="film-title">Interstellar</span><span class="film-note">Nolan</span></li>
+        <li><span class="film-year">2019</span><span class="film-title">Parasite</span><span class="film-note">Bong Joon-ho</span></li>
+        <li><span class="film-year">2006</span><span class="film-title">Children of Men</span><span class="film-note">Cuarón</span></li>
+        <li class="film-gwh"><div class="gwh-bg" aria-hidden="true"></div><span class="film-year">1997</span><span class="film-title">Good Will Hunting</span><span class="film-note">Gus Van Sant</span></li>
+        <li class="film-snap"><canvas class="snap-canvas" aria-hidden="true"></canvas><div class="snap-flash" aria-hidden="true"></div><span class="film-year">2018</span><span class="film-title">Avengers: Infinity War</span><span class="film-note">Russo Brothers</span></li>
+      </ul>
+    </section>
+
+    <section id="games" class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>Mini Games</h2>
+        <span class="section-rule"></span>
+      </div>
+      <p class="section-intro">
+        Tiny things to play with. More coming — I want a little arcade in here
+        eventually.
+      </p>
+      <div class="games-grid">
+        <a class="game-card" href="#">
+          <div class="game-art game-art--reaction">
+            <div class="game-target"></div>
+          </div>
+          <h3>Reaction</h3>
+          <p>Wait for green. Click as fast as you can. Try to beat 200ms.</p>
+        </a>
+        <a class="game-card" href="#">
+          <div class="game-art game-art--memory">
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            <div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          </div>
+          <h3>Sequence</h3>
+          <p>A Simon-style memory game. How long can you keep the chain alive?</p>
+        </a>
+        <a class="game-card" href="#">
+          <div class="game-art game-art--type">
+            <span>the quick&nbsp;<span class="caret">|</span></span>
+          </div>
+          <h3>Type Test</h3>
+          <p>60 seconds. Real words. Find out if your keyboard is actually fast.</p>
+        </a>
+      </div>
+    </section>
+
+    <section id="contact" class="section section--contact">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>Say hi</h2>
+        <span class="section-rule"></span>
+      </div>
+      <div class="contact-block">
+        <p class="contact-lead">
+          If you've built something cool, want to collaborate, or just want to
+          chat about a film — my inbox is open.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:hello@marcdelaney.co.uk" class="contact-link">
+            <span class="contact-label">email</span>
+            <span class="contact-value">hello@marcdelaney.co.uk</span>
+          </a>
+          <a href="#" class="contact-link">
+            <span class="contact-label">github</span>
+            <span class="contact-value">@marcdelaney</span>
+          </a>
+          <a href="#" class="contact-link">
+            <span class="contact-label">x</span>
+            <span class="contact-value">@marcdelaney</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Marc Delaney</span>
+    <span class="footer-mid">Built by hand. No frameworks were harmed.</span>
+    <span class="footer-time" id="footerTime">--:--:--</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
