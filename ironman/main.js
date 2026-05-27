@@ -29,6 +29,26 @@ const threeCanvas = document.getElementById("three");
 const loadingEl = document.getElementById("loading");
 const loadingFill = document.getElementById("loading-fill");
 const loadingText = document.getElementById("loading-text");
+const qrFallback = document.getElementById("qr-fallback");
+const qrButton = document.getElementById("qr-button");
+const qrEyebrow = document.getElementById("qr-eyebrow");
+const qrTitle = document.getElementById("qr-title");
+
+function showQrFallback({ eyebrow, title } = {}) {
+  if (eyebrow) qrEyebrow.textContent = eyebrow;
+  if (title) qrTitle.textContent = title;
+  qrFallback.hidden = false;
+}
+function hideQrFallback() {
+  qrEyebrow.textContent = "on mobile";
+  qrTitle.textContent = "scan to open the filter on your phone";
+  qrFallback.hidden = true;
+}
+qrButton.addEventListener("click", () => showQrFallback());
+qrFallback.querySelector(".qr-close").addEventListener("click", hideQrFallback);
+qrFallback.addEventListener("click", (e) => {
+  if (e.target === qrFallback) hideQrFallback();
+});
 
 const TOTAL_STEPS = 4;
 let completedSteps = 0;
@@ -174,6 +194,20 @@ function run(landmarker, three) {
   frame();
 }
 
+function isCameraError(err) {
+  if (!err) return false;
+  const name = err.name || "";
+  return (
+    name === "NotAllowedError" ||
+    name === "NotFoundError" ||
+    name === "NotReadableError" ||
+    name === "OverconstrainedError" ||
+    name === "SecurityError" ||
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  );
+}
+
 (async () => {
   try {
     loadingText.textContent = "requesting camera";
@@ -193,6 +227,14 @@ function run(landmarker, three) {
     run(landmarker, three);
   } catch (err) {
     console.error(err);
-    showLoadingError(err.message);
+    if (isCameraError(err)) {
+      hideLoading();
+      showQrFallback({
+        eyebrow: "camera unavailable",
+        title: "no problem — scan to use it on your phone",
+      });
+    } else {
+      showLoadingError(err.message);
+    }
   }
 })();
