@@ -506,3 +506,24 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.hidden) close();
   });
 })();
+
+// touch devices: synthesize hover on tap so the film effects can be triggered
+// by finger. Auto-fire mouseleave after a few seconds so effects don't stay stuck on.
+(function initTouchFilms() {
+  if (!matchMedia('(hover: none)').matches) return;
+  const HOLD_MS = 4000;
+  document.querySelectorAll('.films-list li').forEach((row) => {
+    let timer = null;
+    row.addEventListener('click', (e) => {
+      // taps on interactive children (the "try the mask" button, future links) shouldn't trigger the row effect
+      if (e.target.closest('button, a')) return;
+      clearTimeout(timer);
+      // existing effect handlers listen on mouseenter/mouseleave — synthesize those
+      row.dispatchEvent(new Event('mouseenter'));
+      timer = setTimeout(() => {
+        row.dispatchEvent(new Event('mouseleave'));
+        timer = null;
+      }, HOLD_MS);
+    });
+  });
+})();

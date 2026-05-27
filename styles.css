@@ -643,6 +643,25 @@ main {
   border-bottom: 1px solid var(--line);
   transition: background 0.2s ease, padding 0.2s ease;
   cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.films-hint { display: none; }
+@media (hover: none) {
+  .films-list li { cursor: pointer; }
+  .films-hint {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin: 0.5rem 0 1rem;
+    opacity: 0.75;
+  }
+  .films-hint::before {
+    content: '↳ ';
+    color: var(--accent);
+  }
 }
 .films-list li:hover {
   background: rgba(255, 255, 255, 0.02);
