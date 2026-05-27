@@ -447,6 +447,29 @@ main {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  grid-template-columns: 80px 1fr auto auto;
+}
+.film-action {
+  position: relative;
+  z-index: 5;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--accent);
+  font: 500 0.72rem var(--font-mono);
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.film-action:hover {
+  border-color: var(--accent);
+  background: rgba(94, 234, 212, 0.06);
+  transform: translateY(-1px);
+}
+.film-snap.is-dusting > .film-action {
+  transition: none;
+  opacity: 1;
 }
 .film-snap > .film-year,
 .film-snap > .film-title,
@@ -719,6 +742,8 @@ main {
   font-size: 1.1rem;
   color: var(--text-dim);
 }
+
+
 .caret {
   display: inline-block;
   color: var(--accent);
@@ -788,7 +813,9 @@ main {
   .about-grid,
   .contact-block { grid-template-columns: 1fr; gap: 2rem; }
   .films-list li { grid-template-columns: 60px 1fr; }
+  .film-snap { grid-template-columns: 60px 1fr; }
   .film-note { grid-column: 2; font-size: 0.75rem; }
+  .film-action { grid-column: 2; justify-self: start; margin-top: 0.25rem; }
   .footer { flex-direction: column; text-align: center; }
   .section { padding: 4rem 0; }
 }
@@ -807,6 +834,53 @@ main {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ---------- helmet filter modal ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modalIn 0.2s ease-out;
+}
+.modal[hidden] { display: none; }
+@keyframes modalIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

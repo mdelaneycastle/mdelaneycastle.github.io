@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Iron Man Filter</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    body { display: flex; align-items: center; justify-content: center; }
+    .stage { position: relative; max-width: 100vw; max-height: 100vh; }
+    video, #three {
+      display: block;
+      max-width: 100vw;
+      max-height: 100vh;
+      transform: scaleX(-1);
+    }
+    #three { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    #status { position: fixed; top: 12px; left: 12px; color: #fff; font: 14px system-ui; opacity: 0.7; }
+    #panel {
+      position: fixed; top: 12px; right: 12px; z-index: 10;
+      background: rgba(0,0,0,0.6); color: #fff; font: 12px system-ui;
+      padding: 12px 14px; border-radius: 8px; min-width: 220px;
+      backdrop-filter: blur(6px);
+    }
+    #panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+    #panel label { display: block; margin: 6px 0 2px; opacity: 0.8; }
+    #panel input[type=range] { width: 100%; }
+    #panel select {
+      width: 100%; padding: 4px 6px; margin-bottom: 6px;
+      background: #222; color: #fff; border: 1px solid #444; border-radius: 4px;
+      font: inherit;
+    }
+    #panel .row { display: flex; justify-content: space-between; align-items: baseline; }
+    #panel .val { font-family: ui-monospace, monospace; opacity: 0.9; }
+    #panel button {
+      margin-top: 10px; width: 100%; padding: 6px;
+      background: #222; color: #fff; border: 1px solid #444; border-radius: 4px;
+      font: inherit; cursor: pointer;
+    }
+    #panel button:hover { background: #333; }
+    #back-link {
+      position: fixed; bottom: 12px; left: 12px; z-index: 10;
+      color: #fff; font: 12px system-ui; text-decoration: none;
+      background: rgba(0,0,0,0.6); padding: 6px 10px; border-radius: 6px;
+      backdrop-filter: blur(6px); opacity: 0.7; transition: opacity 0.15s;
+    }
+    #back-link:hover { opacity: 1; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a id="back-link" href="/">← marcdelaney.co.uk</a>
+  <script>
+    // when embedded in a modal iframe, hide the back link (the parent has a close button)
+    if (window.self !== window.top) {
+      document.getElementById('back-link').style.display = 'none';
+    }
+  </script>
+  <div id="status">starting…</div>
+  <div id="panel">
+    <h3>mask tuning</h3>
+    <label for="model">model</label>
+    <select id="model"></select>
+    <div class="row"><label for="scale">scale</label><span class="val" id="scale-v">1.00</span></div>
+    <input id="scale" type="range" min="0.3" max="10" step="0.01" value="1.0" />
+    <div class="row"><label for="rotX">rot X (pitch)</label><span class="val" id="rotX-v">0.00</span></div>
+    <input id="rotX" type="range" min="-3.14" max="3.14" step="0.01" value="0" />
+    <div class="row"><label for="rotY">rot Y (yaw)</label><span class="val" id="rotY-v">0.00</span></div>
+    <input id="rotY" type="range" min="-3.14" max="3.14" step="0.01" value="0" />
+    <div class="row"><label for="rotZ">rot Z (roll)</label><span class="val" id="rotZ-v">0.00</span></div>
+    <input id="rotZ" type="range" min="-3.14" max="3.14" step="0.01" value="0" />
+    <div class="row"><label for="offX">offset X (left/right) cm</label><span class="val" id="offX-v">0.0</span></div>
+    <input id="offX" type="range" min="-15" max="15" step="0.1" value="0" />
+    <div class="row"><label for="offY">offset Y (up/down) cm</label><span class="val" id="offY-v">0.0</span></div>
+    <input id="offY" type="range" min="-15" max="15" step="0.1" value="0" />
+    <div class="row"><label for="offZ">offset Z (fwd/back) cm</label><span class="val" id="offZ-v">0.0</span></div>
+    <input id="offZ" type="range" min="-15" max="15" step="0.1" value="0" />
+    <button id="copy">copy values</button>
+  </div>
+  <div class="stage">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="three"></canvas>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

@@ -470,3 +470,39 @@ document.addEventListener('keydown', (e) => {
     );
   }
 });
+
+// helmet filter modal — lazy-load iframe on open, unload on close to stop the camera
+(function initHelmetModal() {
+  const modal = document.getElementById('helmet-modal');
+  if (!modal) return;
+  const iframe = modal.querySelector('.modal-iframe');
+  const closeBtn = modal.querySelector('.modal-close');
+
+  function open() {
+    if (!iframe.getAttribute('src')) iframe.setAttribute('src', '/ironman/');
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    iframe.removeAttribute('src');
+  }
+
+  document.querySelectorAll('[data-open-helmet]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      open();
+    });
+  });
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.hidden) close();
+  });
+})();
