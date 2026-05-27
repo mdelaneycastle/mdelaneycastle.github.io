@@ -479,7 +479,7 @@ document.addEventListener('keydown', (e) => {
   const closeBtn = modal.querySelector('.modal-close');
 
   function open() {
-    if (!iframe.getAttribute('src')) iframe.setAttribute('src', '/ironman/');
+    if (!iframe.getAttribute('src')) iframe.setAttribute('src', '/ironman/?v=2');
     modal.hidden = false;
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
