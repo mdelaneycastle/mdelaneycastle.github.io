@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Marvel Mask Filter</title>
   <style>
     html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; }
@@ -170,6 +171,19 @@
       opacity: 0.5; transition: opacity 0.15s;
     }
     .qr-close:hover { opacity: 1; }
+
+    /* mobile: bump UI text sizes */
+    @media (max-width: 600px) {
+      #back-link { font-size: 15px; padding: 8px 12px; }
+      #qr-button { font-size: 15px; padding: 8px 12px; }
+      #model-toggle button { font-size: 14px; padding: 10px 18px; }
+      .loading-text { font-size: 13px; letter-spacing: 0.2em; }
+      .qr-eyebrow { font-size: 12px; }
+      .qr-title { font-size: 17px; max-width: 280px; }
+      .qr-url { font-size: 13px; }
+      .qr-img { width: 220px; height: 220px; }
+      .qr-close { font-size: 26px; padding: 6px; }
+    }
   </style>
   <script type="importmap">
   {
@@ -216,6 +230,6 @@
     <video id="video" autoplay playsinline muted></video>
     <canvas id="three"></canvas>
   </div>
-  <script type="module" src="./main.js?v=3"></script>
+  <script type="module" src="./main.js?v=4"></script>
 </body>
 </html>
