@@ -918,6 +918,24 @@ main {
   border-color: var(--accent);
 }
 
+@media (max-width: 768px) {
+  .modal { padding: 0; }
+  .modal-popup {
+    width: 100vw;
+    height: 100vh;
+    max-height: none;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+  .modal-close {
+    width: 42px;
+    height: 42px;
+    top: 14px;
+    right: 14px;
+    font-size: 24px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
