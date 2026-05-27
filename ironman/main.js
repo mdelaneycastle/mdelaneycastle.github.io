@@ -26,8 +26,24 @@ const MODELS = [
 
 const video = document.getElementById("video");
 const threeCanvas = document.getElementById("three");
-const statusEl = document.getElementById("status");
-const setStatus = (m) => (statusEl.textContent = m);
+const loadingEl = document.getElementById("loading");
+const loadingFill = document.getElementById("loading-fill");
+const loadingText = document.getElementById("loading-text");
+
+const TOTAL_STEPS = 4;
+let completedSteps = 0;
+function stepDone(label) {
+  completedSteps++;
+  const pct = Math.min(100, (completedSteps / TOTAL_STEPS) * 100);
+  loadingFill.style.width = pct + "%";
+  if (label) loadingText.textContent = label;
+}
+function hideLoading() {
+  loadingEl.classList.add("is-hidden");
+}
+function showLoadingError(msg) {
+  loadingText.textContent = "error: " + msg;
+}
 
 async function startWebcam() {
   const stream = await navigator.mediaDevices.getUserMedia({
@@ -84,30 +100,29 @@ async function setupThree(width, height) {
   scene.add(helmetGroup);
 
   const loader = new GLTFLoader();
-  const models = await Promise.all(
-    MODELS.map(async (cfg) => {
-      const gltf = await loader.loadAsync(cfg.file);
-      const root = gltf.scene;
-      const box = new THREE.Box3().setFromObject(root);
-      const size = new THREE.Vector3();
-      const center = new THREE.Vector3();
-      box.getSize(size);
-      box.getCenter(center);
-      root.position.sub(center);
-      const baseScale = HELMET_TARGET_WIDTH_CM / size.x;
+  const models = [];
+  for (const cfg of MODELS) {
+    const gltf = await loader.loadAsync(cfg.file);
+    const root = gltf.scene;
+    const box = new THREE.Box3().setFromObject(root);
+    const size = new THREE.Vector3();
+    const center = new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+    root.position.sub(center);
+    const baseScale = HELMET_TARGET_WIDTH_CM / size.x;
 
-      const mount = new THREE.Group();
-      mount.add(root);
-      mount.scale.setScalar(baseScale * cfg.defaults.scale);
-      mount.position.set(...cfg.defaults.offset);
-      mount.rotation.set(...cfg.defaults.rot);
-      mount.visible = false;
-      helmetGroup.add(mount);
+    const mount = new THREE.Group();
+    mount.add(root);
+    mount.scale.setScalar(baseScale * cfg.defaults.scale);
+    mount.position.set(...cfg.defaults.offset);
+    mount.rotation.set(...cfg.defaults.rot);
+    mount.visible = false;
+    helmetGroup.add(mount);
 
-      console.log(`[${cfg.key}] size:`, size, "baseScale:", baseScale);
-      return { ...cfg, mount, baseScale };
-    })
-  );
+    models.push({ ...cfg, mount, baseScale });
+    stepDone(`loaded ${cfg.label.toLowerCase()}`);
+  }
 
   let activeIdx = 0;
   models[activeIdx].mount.visible = true;
@@ -116,112 +131,26 @@ async function setupThree(width, height) {
     activeIdx = idx;
     models[activeIdx].mount.visible = true;
   };
-  const getActive = () => models[activeIdx];
 
-  return { renderer, scene, camera, helmetGroup, models, setActive, getActive };
+  return { renderer, scene, camera, helmetGroup, models, setActive };
 }
 
-function wireControls(three) {
-  const modelEl = document.getElementById("model");
-  const scaleEl = document.getElementById("scale");
-  const rotXEl = document.getElementById("rotX");
-  const rotYEl = document.getElementById("rotY");
-  const rotZEl = document.getElementById("rotZ");
-  const offXEl = document.getElementById("offX");
-  const offYEl = document.getElementById("offY");
-  const offZEl = document.getElementById("offZ");
-  const scaleV = document.getElementById("scale-v");
-  const rotXV = document.getElementById("rotX-v");
-  const rotYV = document.getElementById("rotY-v");
-  const rotZV = document.getElementById("rotZ-v");
-  const offXV = document.getElementById("offX-v");
-  const offYV = document.getElementById("offY-v");
-  const offZV = document.getElementById("offZ-v");
-  const copyBtn = document.getElementById("copy");
-
-  for (const m of three.models) {
-    const opt = document.createElement("option");
-    opt.value = m.key;
-    opt.textContent = m.label;
-    modelEl.appendChild(opt);
-  }
-  modelEl.value = three.getActive().key;
-
-  function loadFromActive() {
-    const a = three.getActive();
-    scaleEl.value = (a.mount.scale.x / a.baseScale).toFixed(2);
-    rotXEl.value = a.mount.rotation.x.toFixed(2);
-    rotYEl.value = a.mount.rotation.y.toFixed(2);
-    rotZEl.value = a.mount.rotation.z.toFixed(2);
-    offXEl.value = a.mount.position.x.toFixed(1);
-    offYEl.value = a.mount.position.y.toFixed(1);
-    offZEl.value = a.mount.position.z.toFixed(1);
-    updateReadouts();
-  }
-
-  function updateReadouts() {
-    scaleV.textContent = parseFloat(scaleEl.value).toFixed(2);
-    rotXV.textContent = parseFloat(rotXEl.value).toFixed(2);
-    rotYV.textContent = parseFloat(rotYEl.value).toFixed(2);
-    rotZV.textContent = parseFloat(rotZEl.value).toFixed(2);
-    offXV.textContent = parseFloat(offXEl.value).toFixed(1);
-    offYV.textContent = parseFloat(offYEl.value).toFixed(1);
-    offZV.textContent = parseFloat(offZEl.value).toFixed(1);
-  }
-
-  function apply() {
-    const a = three.getActive();
-    a.mount.scale.setScalar(a.baseScale * parseFloat(scaleEl.value));
-    a.mount.rotation.set(
-      parseFloat(rotXEl.value),
-      parseFloat(rotYEl.value),
-      parseFloat(rotZEl.value)
-    );
-    a.mount.position.set(
-      parseFloat(offXEl.value),
-      parseFloat(offYEl.value),
-      parseFloat(offZEl.value)
-    );
-    updateReadouts();
-  }
-
-  modelEl.addEventListener("change", () => {
-    const idx = three.models.findIndex((m) => m.key === modelEl.value);
-    three.setActive(idx);
-    loadFromActive();
+function wireToggle(three) {
+  const buttons = document.querySelectorAll("#model-toggle button");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.model;
+      const idx = three.models.findIndex((m) => m.key === key);
+      if (idx === -1) return;
+      three.setActive(idx);
+      buttons.forEach((b) => b.classList.toggle("is-active", b === btn));
+    });
   });
-
-  [scaleEl, rotXEl, rotYEl, rotZEl, offXEl, offYEl, offZEl].forEach((el) =>
-    el.addEventListener("input", apply)
-  );
-
-  copyBtn.addEventListener("click", async () => {
-    const a = three.getActive();
-    const text =
-      `${a.key}: { scale: ${parseFloat(scaleEl.value).toFixed(2)}, ` +
-      `rot: [${parseFloat(rotXEl.value).toFixed(2)}, ` +
-      `${parseFloat(rotYEl.value).toFixed(2)}, ` +
-      `${parseFloat(rotZEl.value).toFixed(2)}], ` +
-      `offset: [${parseFloat(offXEl.value).toFixed(1)}, ` +
-      `${parseFloat(offYEl.value).toFixed(1)}, ` +
-      `${parseFloat(offZEl.value).toFixed(1)}] }`;
-    try {
-      await navigator.clipboard.writeText(text);
-      copyBtn.textContent = "copied!";
-      setTimeout(() => (copyBtn.textContent = "copy values"), 1200);
-    } catch {
-      copyBtn.textContent = text;
-    }
-  });
-
-  loadFromActive();
 }
 
 function run(landmarker, three) {
   const { renderer, scene, camera, helmetGroup } = three;
   let lastTs = -1;
-  let loggedMatrix = false;
-  let lastFaceCount = -1;
 
   function frame() {
     if (video.readyState >= 2) {
@@ -230,16 +159,7 @@ function run(landmarker, three) {
         lastTs = ts;
         const result = landmarker.detectForVideo(video, ts);
         const mats = result.facialTransformationMatrixes;
-        const faces = result.faceLandmarks?.length ?? 0;
-        if (faces !== lastFaceCount) {
-          lastFaceCount = faces;
-          setStatus(`faces: ${faces} | matrices: ${mats?.length ?? 0}`);
-        }
         if (mats && mats.length > 0) {
-          if (!loggedMatrix) {
-            loggedMatrix = true;
-            console.log("[ironman] first face matrix:", Array.from(mats[0].data));
-          }
           helmetGroup.matrix.fromArray(mats[0].data);
           helmetGroup.matrixWorldNeedsUpdate = true;
           helmetGroup.visible = true;
@@ -256,17 +176,23 @@ function run(landmarker, three) {
 
 (async () => {
   try {
-    setStatus("requesting camera…");
+    loadingText.textContent = "requesting camera";
     await startWebcam();
-    setStatus("loading face model…");
+    stepDone("camera ready");
+
+    loadingText.textContent = "loading face tracker";
     const landmarker = await createLandmarker();
-    setStatus("loading helmet…");
+    stepDone("face tracker ready");
+
+    loadingText.textContent = "loading suits";
     const three = await setupThree(video.videoWidth, video.videoHeight);
-    wireControls(three);
-    setStatus("");
+    wireToggle(three);
+
+    loadingText.textContent = "ready";
+    setTimeout(hideLoading, 350);
     run(landmarker, three);
   } catch (err) {
     console.error(err);
-    setStatus("error: " + err.message);
+    showLoadingError(err.message);
   }
 })();

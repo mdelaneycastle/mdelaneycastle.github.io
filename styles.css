@@ -836,22 +836,38 @@ main {
   transform: translateY(0);
 }
 
-/* ---------- helmet filter modal ---------- */
+/* ---------- mask filter modal (popup) ---------- */
 .modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: modalIn 0.2s ease-out;
+  padding: 1.5rem;
+  animation: modalIn 0.18s ease-out;
 }
 .modal[hidden] { display: none; }
 @keyframes modalIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+.modal-popup {
+  position: relative;
+  width: min(720px, 90vw);
+  aspect-ratio: 16 / 9;
+  max-height: 80vh;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: popupIn 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes popupIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 .modal-iframe {
   width: 100%;
@@ -861,25 +877,25 @@ main {
 }
 .modal-close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 1;
-  width: 38px;
-  height: 38px;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
   backdrop-filter: blur(6px);
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   border-color: var(--accent);
 }
 
